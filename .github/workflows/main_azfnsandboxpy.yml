@@ -52,6 +52,11 @@ jobs:
       url: ${{ steps.deploy-to-function.outputs.webapp-url }}
 
     steps:
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+          
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
@@ -65,6 +70,6 @@ jobs:
           app-name: 'AzFnSandboxPy'
           # slot-name: 'Production'
           package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_43CC494AC3114AAD86BF409B6E5B7A69 }}
+          # publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_43CC494AC3114AAD86BF409B6E5B7A69 }}
           # scm-do-build-during-deployment: true
           # enable-oryx-build: true
