@@ -78,12 +78,13 @@ jobs:
       
       - name: Build and push image to ACR with SHA
         id: build-image
+        working-directory: src
         run: |
           az acr build \
             --image ${{env.AZURE_CONTAINER_REGISTRY_NAME}}.azurecr.io/azfnsandbox/${{env.IMAGE_NAME}}:${{ steps.set_tag.outputs.tag }} \
             --registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io \
-            --file  ${{env.AZURE_FUNCTIONAPP_DOCKERFILE_PATH}} \
-            ./src
+            --file Dockerfile \
+            .
 
       - name: 'Run Azure Functions Container Action'
         uses: Azure/functions-container-action@v1
