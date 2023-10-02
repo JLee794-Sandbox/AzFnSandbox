@@ -28,7 +28,7 @@ on:
 
 env:
   AZURE_CONTAINER_REGISTRY_NAME: 'lillyflaskdemoacr'
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_DOCKERFILE_PATH: './src/Dockerfile' # set this to the path to your web app project, defaults to the repository root
   IMAGE_NAME: 'flaskapp-cicd'
   IMAGE_TAG_MAJOR: 1
   IMAGE_TAG_MINOR: 0
@@ -63,9 +63,9 @@ jobs:
           echo "::debug::github.sha=${{ github.sha }}"
           
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            [[ ${{ github.event.inputs.incrementMajor }} == true ]] && major=(${{env.IMAGE_TAG_MAJOR}} + 1) || major=${{env.IMAGE_TAG_MAJOR}}
-            [[ ${{ github.event.inputs.incrementMinor }} == true ]] && minor=(${{env.IMAGE_TAG_MINOR}} + 1) || minor=${{env.IMAGE_TAG_MINOR}}
-            [[ ${{ github.event.inputs.incrementPatch }} == true ]] && patch=(${{env.IMAGE_TAG_PATCH}} + 1) || patch=${{env.IMAGE_TAG_PATCH}}
+            [[ ${{ github.event.inputs.incrementMajor }} ]] && major=(${{env.IMAGE_TAG_MAJOR}} + 1) || major=${{env.IMAGE_TAG_MAJOR}}
+            [[ ${{ github.event.inputs.incrementMinor }} ]] && minor=(${{env.IMAGE_TAG_MINOR}} + 1) || minor=${{env.IMAGE_TAG_MINOR}}
+            [[ ${{ github.event.inputs.incrementPatch }} ]] && patch=(${{env.IMAGE_TAG_PATCH}} + 1) || patch=${{env.IMAGE_TAG_PATCH}}
 
             echo "tag=v${major}.${minor}.${patch}" >> $GITHUB_OUTPUT
 
@@ -80,5 +80,4 @@ jobs:
         with:
           push: true
           tags: ${{env.AZURE_CONTAINER_REGISTRY_NAME}}.azurecr.io/${{env.IMAGE_NAME}}:${{ steps.set_tag.outputs.tag }}
-          file: aspnet-core-dotnet-core/Dockerfile
-          
+          file: ${{env.AZURE_FUNCTIONAPP_DOCKERFILE_PATH}}
