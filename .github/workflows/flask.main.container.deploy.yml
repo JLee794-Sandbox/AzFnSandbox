@@ -81,7 +81,7 @@ jobs:
         run: |
           az acr build \
             --image ${{env.AZURE_CONTAINER_REGISTRY_NAME}}.azurecr.io/azfnsandbox/${{env.IMAGE_NAME}}:${{ steps.set_tag.outputs.tag }} \
-            --registry ${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io \
+            --registry ${{ env.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io \
             --file  ${{env.AZURE_FUNCTIONAPP_DOCKERFILE_PATH}} \
             ./src
 
