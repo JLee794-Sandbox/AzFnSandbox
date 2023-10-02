@@ -63,9 +63,9 @@ jobs:
           echo "::debug::github.sha=${{ github.sha }}"
           
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            [[ ${{ inputs.incrementMajor }} ]] && major=(${{env.IMAGE_TAG_MAJOR}} + 1) || major=${{env.IMAGE_TAG_MAJOR}}
-            [[ ${{ inputs.incrementMinor }} ]] && minor=(${{env.IMAGE_TAG_MINOR}} + 1) || minor=${{env.IMAGE_TAG_MINOR}}
-            [[ ${{ inputs.incrementPatch }} ]] && patch=(${{env.IMAGE_TAG_PATCH}} + 1) || patch=${{env.IMAGE_TAG_PATCH}}
+            major=[ ${{ inputs.incrementMajor }} ] && echo "${{env.IMAGE_TAG_MAJOR}} + 1)" || echo "${{env.IMAGE_TAG_MAJOR}}"
+            minor=[ ${{ inputs.incrementMinor }} ] && echo "${{env.IMAGE_TAG_MINOR}} + 1)" || echo "${{env.IMAGE_TAG_MINOR}}"
+            patch=[ ${{ inputs.incrementPatch }} ] && echo "${{env.IMAGE_TAG_PATCH}} + 1)" || echo "${{env.IMAGE_TAG_PATCH}}"
 
             echo "tag=v${major}.${minor}.${patch}" >> $GITHUB_OUTPUT
 
@@ -75,7 +75,8 @@ jobs:
 
           echo "::debug::GITHUB_OUTPUT=$(cat $GITHUB_OUTPUT)"
       
-      - name: Build the frontend image and push it to ACR
+      
+      - name: Build and Deploy the image to the ACR with the SHA
         uses: docker/build-push-action@v2
         with:
           push: true
