@@ -1,7 +1,11 @@
 name: Terraform Deploy to Azure
 
 on:
-  # push:
+  push:
+    branches:
+      - main
+    paths:
+      - 'terraform/**'
   workflow_dispatch:
 
 permissions:
