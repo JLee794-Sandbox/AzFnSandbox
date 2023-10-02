@@ -52,6 +52,8 @@ No modules.
 
 | Name | Description |
 |------|-------------|
+| <a name="output_acr_id"></a> [acr\_id](#output\_acr\_id) | n/a |
+| <a name="output_acr_login_server"></a> [acr\_login\_server](#output\_acr\_login\_server) | n/a |
 | <a name="output_function_app_url"></a> [function\_app\_url](#output\_function\_app\_url) | n/a |
 | <a name="output_key_vault_id"></a> [key\_vault\_id](#output\_key\_vault\_id) | n/a |
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
