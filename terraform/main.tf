@@ -61,7 +61,7 @@ resource "azurerm_container_registry" "acr" {
 }
 
 resource "azurerm_service_plan" "this" {
-  name                = "lillypoc2-appserviceplan"
+  name                = "${var.application_name}-serviceplan"
   location            = azurerm_resource_group.this.location
   resource_group_name = azurerm_resource_group.this.name
 
@@ -71,8 +71,16 @@ resource "azurerm_service_plan" "this" {
   tags = local.tags
 }
 
+resource "azurecaf_name" "stor" {
+  name          = var.application_name
+  resource_type = "azurerm_storage_account"
+  prefixes      = []
+  suffixes      = []
+  clean_input   = true
+}
+
 resource "azurerm_storage_account" "this" {
-  name                     = "lillypoc2storacc"
+  name                     = azurecaf_name.stor.result
   resource_group_name      = azurerm_resource_group.this.name
   location                 = azurerm_resource_group.this.location
   account_tier             = "Standard"
