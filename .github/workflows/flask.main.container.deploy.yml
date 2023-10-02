@@ -62,7 +62,7 @@ jobs:
           echo "::debug::github.event.inputs.incrementPatch=${{ github.event.inputs.incrementPatch }}"
           echo "::debug::github.sha=${{ github.sha }}"
           
-          if [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
             [[ ${{ github.event.inputs.incrementMajor }} == true ]] && major=(${{env.IMAGE_TAG_MAJOR}} + 1) || major=${{env.IMAGE_TAG_MAJOR}}
             [[ ${{ github.event.inputs.incrementMinor }} == true ]] && minor=(${{env.IMAGE_TAG_MINOR}} + 1) || minor=${{env.IMAGE_TAG_MINOR}}
             [[ ${{ github.event.inputs.incrementPatch }} == true ]] && patch=(${{env.IMAGE_TAG_PATCH}} + 1) || patch=${{env.IMAGE_TAG_PATCH}}
