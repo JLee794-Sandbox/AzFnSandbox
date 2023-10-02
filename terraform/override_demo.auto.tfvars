@@ -1,1 +1,1 @@
-application_name = "demo"
+application_name = "ovrdemo-lilly"
