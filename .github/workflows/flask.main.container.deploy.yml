@@ -57,15 +57,15 @@ jobs:
         id: set_tag
         run: |
           echo "::debug::github.event_name=${{ github.event_name }}"
-          echo "::debug::github.event.inputs.incrementMajor=${{ github.event.inputs.incrementMajor }}"
-          echo "::debug::github.event.inputs.incrementMinor=${{ github.event.inputs.incrementMinor }}"
-          echo "::debug::github.event.inputs.incrementPatch=${{ github.event.inputs.incrementPatch }}"
+          echo "::debug::inputs.incrementMajor=${{ inputs.incrementMajor }}"
+          echo "::debug::inputs.incrementMinor=${{ inputs.incrementMinor }}"
+          echo "::debug::inputs.incrementPatch=${{ inputs.incrementPatch }}"
           echo "::debug::github.sha=${{ github.sha }}"
           
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            [[ ${{ github.event.inputs.incrementMajor }} ]] && major=(${{env.IMAGE_TAG_MAJOR}} + 1) || major=${{env.IMAGE_TAG_MAJOR}}
-            [[ ${{ github.event.inputs.incrementMinor }} ]] && minor=(${{env.IMAGE_TAG_MINOR}} + 1) || minor=${{env.IMAGE_TAG_MINOR}}
-            [[ ${{ github.event.inputs.incrementPatch }} ]] && patch=(${{env.IMAGE_TAG_PATCH}} + 1) || patch=${{env.IMAGE_TAG_PATCH}}
+            [[ ${{ inputs.incrementMajor }} ]] && major=(${{env.IMAGE_TAG_MAJOR}} + 1) || major=${{env.IMAGE_TAG_MAJOR}}
+            [[ ${{ inputs.incrementMinor }} ]] && minor=(${{env.IMAGE_TAG_MINOR}} + 1) || minor=${{env.IMAGE_TAG_MINOR}}
+            [[ ${{ inputs.incrementPatch }} ]] && patch=(${{env.IMAGE_TAG_PATCH}} + 1) || patch=${{env.IMAGE_TAG_PATCH}}
 
             echo "tag=v${major}.${minor}.${patch}" >> $GITHUB_OUTPUT
 
