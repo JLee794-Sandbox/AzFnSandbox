@@ -1,0 +1,84 @@
+# Docs for the Azure Web Apps Deploy action: https://github.com/azure/functions-action
+# More GitHub Actions for Azure: https://github.com/Azure/actions
+# More info on Python, GitHub Actions, and Azure Functions: https://aka.ms/python-webapps-actions
+
+name: Build and deploy Python CONTAINERIZED project to Azure Container Registry - lillyflaskdemoacr
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      incrementMajor:
+        type: boolean
+        description: 'Increment major version for the image? Defaults to false'
+        required: false
+        default: false
+      incrementMinor:
+        type: boolean
+        description: 'Increment minor version for the image? Defaults to false'
+        required: false
+        default: false
+      incrementPatch:
+        type: boolean
+        description: 'Increment patch version for the image? Defaults to true'
+        required: false
+        default: true
+
+env:
+  AZURE_CONTAINER_REGISTRY_NAME: 'lillyflaskdemoacr'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: './src' # set this to the path to your web app project, defaults to the repository root
+  IMAGE_NAME: 'flaskapp-cicd'
+  IMAGE_TAG_MAJOR: 1
+  IMAGE_TAG_MINOR: 0
+  IMAGE_TAG_PATCH: 0
+  PYTHON_VERSION: '3.9' # set this to the python version to use (supports 3.6, 3.7, 3.8)
+
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read  # This is required for actions/checkout
+
+jobs:
+  build-deploy-image:
+    runs-on: ubuntu-latest
+    # environment:
+    #   name: 'Production'
+    steps:
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          # creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}          
+          
+      - name: Set Tag
+        id: set_tag
+        run: |
+          echo "::debug::github.event_name=${{ github.event_name }}"
+          echo "::debug::github.event.inputs.incrementMajor=${{ github.event.inputs.incrementMajor }}"
+          echo "::debug::github.event.inputs.incrementMinor=${{ github.event.inputs.incrementMinor }}"
+          echo "::debug::github.event.inputs.incrementPatch=${{ github.event.inputs.incrementPatch }}"
+          echo "::debug::github.sha=${{ github.sha }}"
+          
+          if [ ${{ github.event_name }} == 'workflow_dispatch' ]; then
+            [[ ${{ github.event.inputs.incrementMajor }} == true ]] && major=(${{env.IMAGE_TAG_MAJOR}} + 1) || major=${{env.IMAGE_TAG_MAJOR}}
+            [[ ${{ github.event.inputs.incrementMinor }} == true ]] && minor=(${{env.IMAGE_TAG_MINOR}} + 1) || minor=${{env.IMAGE_TAG_MINOR}}
+            [[ ${{ github.event.inputs.incrementPatch }} == true ]] && patch=(${{env.IMAGE_TAG_PATCH}} + 1) || patch=${{env.IMAGE_TAG_PATCH}}
+
+            echo "tag=v${major}.${minor}.${patch}" >> $GITHUB_OUTPUT
+
+          else
+            echo "tag=v${{env.IMAGE_TAG_MAJOR}}.${{env.IMAGE_TAG_MINOR}}.${{env.IMAGE_TAG_PATCH}}-${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
+          echo "::debug::GITHUB_OUTPUT=$(cat $GITHUB_OUTPUT)"
+      
+      - name: Build the frontend image and push it to ACR
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          tags: ${{env.AZURE_CONTAINER_REGISTRY_NAME}}.azurecr.io/${{env.IMAGE_NAME}}:${{ steps.set_tag.outputs.tag }}
+          file: aspnet-core-dotnet-core/Dockerfile
+          
