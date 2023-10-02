@@ -28,6 +28,7 @@ on:
 
 env:
   AZURE_CONTAINER_REGISTRY_NAME: 'lillyflaskdemoacr'
+  AZURE_FUNCTIONAPP_NAME: 'AzFnSandboxPy'
   AZURE_FUNCTIONAPP_DOCKERFILE_PATH: './src/Dockerfile' # set this to the path to your web app project, defaults to the repository root
   IMAGE_NAME: 'flaskapp-cicd'
   IMAGE_TAG_MAJOR: 1
@@ -52,7 +53,7 @@ jobs:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}          
-          
+
       - name: Set Tag
         id: set_tag
         run: |
@@ -75,10 +76,18 @@ jobs:
 
           echo "::debug::GITHUB_OUTPUT=$(cat $GITHUB_OUTPUT)"
       
-      
-      - name: Build and Deploy the image to the ACR with the SHA
-        uses: docker/build-push-action@v2
+      - name: Build and push image to ACR with SHA
+        id: build-image
+        run: |
+          az acr build \
+            --image ${{env.AZURE_CONTAINER_REGISTRY_NAME}}.azurecr.io/azfnsandbox/${{env.IMAGE_NAME}}:${{ steps.set_tag.outputs.tag }} \
+            --registry ${{ secrets.AZURE_CONTAINER_REGISTRY_NAME }}.azurecr.io \
+            --file  ${{env.AZURE_FUNCTIONAPP_DOCKERFILE_PATH}} \
+            ./src
+
+      - name: 'Run Azure Functions Container Action'
+        uses: Azure/functions-container-action@v1
+        id: fa
         with:
-          push: true
-          tags: ${{env.AZURE_CONTAINER_REGISTRY_NAME}}.azurecr.io/${{env.IMAGE_NAME}}:${{ steps.set_tag.outputs.tag }}
-          file: ${{env.AZURE_FUNCTIONAPP_DOCKERFILE_PATH}}
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME}}
+          image: ${{env.AZURE_CONTAINER_REGISTRY_NAME}}.azurecr.io/azfnsandbox/${{env.IMAGE_NAME}}:${{ steps.set_tag.outputs.tag }}
