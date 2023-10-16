@@ -48,13 +48,13 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
             name = req_body.get('name')
 
     if name:
-        # path = "testdata/" + name
-        # document = load_document_from_azstorage(path)
-        # vector_store = setup_vector_store()
-        # chunked_docs = chunk_document(path, document)
+        path = "testdata/" + name
+        document = load_document_from_azstorage(path)
+        vector_store = setup_vector_store()
+        chunked_docs = chunk_document(path, document)
 
-        # vector_store.add_documents(chunked_docs)
-        # logging.info("Added %s documents to vector store", len(chunked_docs))
+        vector_store.add_documents(chunked_docs)
+        logging.info("Added %s documents to vector store", len(chunked_docs))
         return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
     else:
         return func.HttpResponse(
@@ -63,9 +63,6 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
         )
 
 def setup_vector_store():
-    logger = logging.getLogger("main.setup_vector_store")
-
-    
     model: str = "text-embedding-ada-002"
 
     vector_store_address: str = os.environ["SEARCH_ENDPOINT"]
