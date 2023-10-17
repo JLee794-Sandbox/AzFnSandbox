@@ -456,7 +456,16 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
+.vscode
+__azurite_db*__.json
+__blobstorage__
+__queuestorage__
+local.settings.json
+test
+.venv
+.venv-linux
+.venv-windows
+.venv.back
 # Spyder project settings
 .spyderproject
 .spyproject

@@ -9,7 +9,7 @@ on:
     branches:
       - main
     paths:
-      - 'src/**'
+      - 'flask/**'
   workflow_dispatch:
     inputs:
       incrementMajor:
@@ -31,7 +31,7 @@ on:
 env:
   AZURE_CONTAINER_REGISTRY_NAME: 'lillyflaskdemoacr'
   AZURE_FUNCTIONAPP_NAME: 'AzFnSandboxPy'
-  AZURE_FUNCTIONAPP_PATH: 'src' # set this to the path to your web app project, defaults to the repository root
+  AZURE_FUNCTIONAPP_PATH: 'flask' # set this to the path to your web app project, defaults to the repository root
   IMAGE_NAME: 'flaskapp-cicd'
   IMAGE_TAG_MAJOR: 1
   IMAGE_TAG_MINOR: 0
