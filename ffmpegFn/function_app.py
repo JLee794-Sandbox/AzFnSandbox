@@ -6,10 +6,8 @@ app = func.FunctionApp(http_auth_level=func.AuthLevel.ANONYMOUS)
 
 import subprocess
 
-FFMPEG_RELATIVE_PATH = "dependencies/ffmpeg/ffmpeg"
+FFMPEG_RELATIVE_PATH = "dependencies/ffmpeg"
 # FILE_SHARE_MOUNT_PATH = os.environ['FILE_SHARE_MOUNT_PATH']
-
-
 
 @app.route(route="ffmpeg_test")
 def http_trigger(req: func.HttpRequest,
