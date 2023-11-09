@@ -8,8 +8,8 @@ import logging
 import os
 import sys
 
-from azure.identity import DefaultAzureCredential
-from azure.keyvault.secrets import SecretClient
+# from azure.identity import DefaultAzureCredential
+# from azure.keyvault.secrets import SecretClient
 from langchain.document_loaders import AzureBlobStorageFileLoader
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.text_splitter import TokenTextSplitter
@@ -18,21 +18,6 @@ from langchain.vectorstores.azuresearch import AzureSearch
 logger = logging.getLogger("azure")
 handler = logging.StreamHandler(stream=sys.stdout)
 logger.addHandler(handler)
-
-@app.route(route="kv_demo")
-def http_trigger_kv(req:func.HttpRequest) -> func.HttpResponse:
-    # Test if the keyvault secret can be retrieved
-    # credential = DefaultAzureCredential()
-    # kv_url = "https://ohdsikv.vault.azure.net/"
-    # secret = "demo"
-
-    # client = SecretClient(vault_url=kv_url, credential=credential)
-    # retrieved_secret = client.get_secret(secret)
-    # logging.info("Retrieved secret %s", retrieved_secret.value)
-    kv_demo = os.environ["KV_DEMO"]
-    
-    logging.info(kv_demo)
-    return func.HttpResponse(kv_demo)
     
 @app.route(route="blob_embed")
 def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
@@ -55,10 +40,10 @@ def http_trigger(req: func.HttpRequest) -> func.HttpResponse:
 
         vector_store.add_documents(chunked_docs)
         logging.info("Added %s documents to vector store", len(chunked_docs))
-        return func.HttpResponse(f"Hello, {name}. This HTTP triggered function executed successfully.")
+        return func.HttpResponse("Processed Blob %s: Added %s documents to vector store", name, len(chunked_docs))
     else:
         return func.HttpResponse(
-          "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response.",
+          "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body to embed blobs.",
           status_code=200
         )
 
