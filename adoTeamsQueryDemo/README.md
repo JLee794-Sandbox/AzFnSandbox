@@ -1,4 +1,4 @@
-# Project Title
+# ADO Teams Query Demo
 
 This project is a Python script that retrieves the list of teams in an Azure DevOps organization and their members.
 
