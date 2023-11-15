@@ -4,14 +4,14 @@ import base64
 import sys
 import pandas as pd
 import os
-from IPython.display import display
-
+# Comment out the below lines until ---- if you are running this in PowerBI
 from dotenv import load_dotenv
-
 load_dotenv()
+# ----- Comment to here
 
-PAT = os.getenv('PAT')
-ORG = os.getenv('ORG')
+# Update the below variables with your ADO organization name and PAT for PowerBI, as you will not be able to use the .env file
+PAT = os.getenv('PAT') # For PowerBI, PAT = 'YOUR_PAT'
+ORG = os.getenv('ORG') # fOR PowerBI, ORG = 'YOUR_ORG'
 
 # Construct the HTTP Auth Header for ADO
 b64PAT=base64.urlsafe_b64encode(f"`:{PAT}".encode('UTF-8')).decode('utf-8')
