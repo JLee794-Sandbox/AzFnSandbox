@@ -1,0 +1,15 @@
+GET http://localhost:7071/api/test_ffmpeg HTTP/1.2
+content-type: application/json
+
+###
+
+GET https://priv-azfnsandboxpy.azurewebsites.net/ HTTP/1.2
+content-type: application/json
+###
+
+GET https://priv-azfnsandboxpy.azurewebsites.net/api/test/ffmpeg HTTP/1.2
+content-type: application/json
+
+###
+
+GET https://http://localhost:7071/api/orchestrators/test HTTP/1.2

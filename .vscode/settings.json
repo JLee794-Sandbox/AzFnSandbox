@@ -1,10 +1,42 @@
 {
-  "azureFunctions.deploySubpath": "ffmpegFn",
+  "azureFunctions.deploySubpath": "./src",
   "azureFunctions.scmDoBuildDuringDeployment": true,
   "azureFunctions.pythonVenv": ".venv",
   "azureFunctions.projectLanguage": "Python",
   "azureFunctions.projectRuntime": "~4",
   "debug.internalConsoleOptions": "neverOpen",
   "azureFunctions.projectLanguageModel": 2,
-  "azureFunctions.projectSubpath": "ffmpegFn"
+  "azureFunctions.projectSubpath": "ffmpegFn",
+  "odata.diagnostic.enable": true,
+  "odata.completion.enable": true,
+  "odata.format.syntax": true,
+  "odata.metadata.map": [
+
+    {
+      "url": "https://analytics.dev.azure.com/CustomerDemos-JL/_odata",
+      "path": "/Users/jinle/Repos/AzFnSandbox/adoTeamsQueryDemo/odata/metadata.xml"
+    },
+    {
+      "url": "https://analytics.dev.azure.com/CustomerDemos-JL/_odata/v4.0-preview/TestPoints",
+      "path": "/Users/jinle/Repos/AzFnSandbox/adoTeamsQueryDemo/odata/metadata.testpoints.xml"
+    }
+  ],
+  "dotnet.defaultSolution": "oDataSDKTest.sln",
+  "azureLogicAppsStandard.deploySubpath": "logicApps",
+  "azureLogicAppsStandard.projectLanguage": "JavaScript",
+  "azureLogicAppsStandard.projectRuntime": "~4",
+  "azureFunctions.suppressProject": true,
+  // "terminal.integrated.env.osx": {
+  //   "PATH": "/Users/jinle/.azurelogicapps/dependencies/DotNetSDK:${env:PATH}"
+  // },
+  // "omnisharp.dotNetCliPaths": [
+  //   "/Users/jinle/.azurelogicapps/dependencies/DotNetSDK"
+  // ],
+  "azurite.location": "/Users/jinle/.azurelogicapps/.azurite",
+  "terminal.integrated.env.osx": {
+    "PATH": "/Users/jinle/.azurelogicapps/dependencies/DotNetSDK:${env:PATH}"
+  },
+  "omnisharp.dotNetCliPaths": [
+    "/Users/jinle/.azurelogicapps/dependencies/DotNetSDK"
+  ]
 }
