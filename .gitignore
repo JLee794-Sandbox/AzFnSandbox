@@ -8,7 +8,7 @@ __pycache__/
 deploy.sh
 deploy.zip
 *.zip
-
+utilities
 # Distribution / packaging
 .Python
 build/
